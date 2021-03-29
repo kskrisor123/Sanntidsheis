@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-
-	"./elevio"
+	"../driver/elevio"
 )
 
 /*
@@ -18,7 +17,7 @@ func main() {
 
 	numFloors := 4
 
-	queue := make([]elevio.ButtonEvent, 0)
+	//queue := make([]elevio.ButtonEvent, 0)
 
 	elevio.Init("localhost:15657", numFloors)
 
