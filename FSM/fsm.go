@@ -16,9 +16,13 @@ func goToFloor(floorRequest int, elevatorState <-chan int) {
 */
 func main() {
 
-	numFloors := 4
+	//numFloors := 4
 
 	//queue := make([]elevio.ButtonEvent, 0)
+	const numFloors = 4
+	const numButtons = 4
+
+	var orderMatrix [numFloors][numButtons]int
 
 	elevio.Init("localhost:15657", numFloors)
 
@@ -35,12 +39,21 @@ func main() {
 	go elevio.PollObstructionSwitch(drv_obstr)
 	go elevio.PollStopButton(drv_stop)
 
+	type ElevatorState struct {
+		IDLE       bool
+		RUNNING    bool
+		OBSTRUCTED bool
+	}
+
+	state := ElevatorState{true, false, false}
+
 	for {
 		select {
 		case a := <-drv_buttons:
 			fmt.Printf("%+v\n", a)
 			elevio.SetButtonLamp(a.Button, a.Floor, true)
-			//queue <- a
+
+			orderMatrix[int(a.Button)][a.Floor] = 1
 
 		case a := <-drv_floors:
 			fmt.Printf("Swag %+v\n", a)
@@ -81,10 +94,6 @@ func calculateMotorDir(floor, order int) bool {
 }
 
 func fsm() {
-	const numFloors = 4
-	const numButtons = 4
-
-	//var orderMatrix [numFloors][numButtons]int
 
 	drv_buttons := make(chan elevio.ButtonEvent)
 	drv_floors := make(chan int)
