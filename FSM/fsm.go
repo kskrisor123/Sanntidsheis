@@ -1,4 +1,4 @@
-package main
+package FSM
 
 import (
 	"fmt"
@@ -242,7 +242,7 @@ var elevator = Elev{
 }
 
 // InternalControl .. Responsible for internal control of a single elevator
-func main() {
+func InternalControl() {
 	println("Connecting to server")
 	elevio.Init("localhost:15657", numFloors)
 
